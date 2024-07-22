@@ -182,3 +182,4 @@ myenv/share/jupyter/nbextensions/pydeck/extensionRequires.js
 myenv/share/jupyter/nbextensions/pydeck/index.js
 myenv/share/jupyter/nbextensions/pydeck/index.js.map
 myenv/share/man/man1/ttx.1
+index_cache/Cohere_trec-rag-2024-index/index/ivf65536_pq8_128_nprobe_1024.idx
