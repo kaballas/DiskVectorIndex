@@ -1,0 +1,7 @@
+{
+    "model": "embed-english-v3.0",
+    "index": "index/ivf65536_pq8_128_nprobe_1024.idx",
+    "corpus_num_lines": 100000,
+    "corpus_file_len": 5,
+    "corpus_folder_len": 2
+}

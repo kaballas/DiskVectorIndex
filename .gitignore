@@ -160,3 +160,4 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+index_cache/Cohere_trec-rag-2024-index/index/ivf65536_pq8_128_nprobe_1024.idx_part
