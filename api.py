@@ -15,6 +15,19 @@ app = Flask(__name__)
 
 @app.route('/ask', methods=['POST'])
 def ask_question():
+    """
+    Endpoint for asking a question and getting a response.
+
+    This endpoint receives a POST request with a JSON payload containing a 'question' field.
+    It decomposes the question into sub-questions, searches for relevant documents for each sub-query,
+    and generates a response using the COHERE API.
+
+    Returns:
+        A JSON response containing the generated response text.
+
+    Raises:
+        400: If no question is provided in the request payload.
+    """
     # Get the question from the request
     data = request.get_json()
     question = data.get('question', '')
@@ -45,9 +58,6 @@ def ask_question():
     for event in co.chat_stream(model="command-r-plus", message=prompt, documents=docs, citation_quality="fast"):
         if event.event_type == "text-generation":
             response_text += event.text
-        elif event.event_type == "citation-generation":
-            response_text += " [" + ", ".join(event.citations[0].document_ids) + "]"
-
     return jsonify({"response": response_text}), 200
 
 if __name__ == '__main__':

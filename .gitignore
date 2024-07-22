@@ -161,3 +161,24 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 index_cache/Cohere_trec-rag-2024-index/index/ivf65536_pq8_128_nprobe_1024.idx_part
+myenv/bin/distro
+myenv/bin/dotenv
+myenv/bin/fonttools
+myenv/bin/jsonschema
+myenv/bin/markdown_py
+myenv/bin/markdown-it
+myenv/bin/markdown2
+myenv/bin/md2pdf
+myenv/bin/pyftmerge
+myenv/bin/pyftsubset
+myenv/bin/pygmentize
+myenv/bin/streamlit
+myenv/bin/streamlit.cmd
+myenv/bin/ttx
+myenv/bin/watchmedo
+myenv/bin/weasyprint
+myenv/etc/jupyter/nbconfig/notebook.d/pydeck.json
+myenv/share/jupyter/nbextensions/pydeck/extensionRequires.js
+myenv/share/jupyter/nbextensions/pydeck/index.js
+myenv/share/jupyter/nbextensions/pydeck/index.js.map
+myenv/share/man/man1/ttx.1
