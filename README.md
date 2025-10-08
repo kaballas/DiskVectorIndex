@@ -13,10 +13,10 @@ Below you find different pre-build indices. The embeddings are downloaded at the
 | Name | Description | #Docs | Index Size (GB) | Memory Needed |
 | --- | --- | :---: | :---: | :---: | 
 |  [Cohere/trec-rag-2024-index](https://huggingface.co/datasets/Cohere/trec-rag-2024-index) | Segmented corpus for [TREC RAG 2024](https://trec-rag.github.io/annoucements/2024-corpus-finalization/) | 113,520,750 | 15GB | 380MB |
-| fineweb-edu-10B-index (soon)  | 10B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 9,267,429 | 1.4GB | 230MB |
-| fineweb-edu-100B-index (soon)  | 100B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 69,672,066 | 9.2GB | 380MB
-| fineweb-edu-350B-index (soon)  | 350B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 160,198,578 | 21GB | 380MB
-| fineweb-edu-index (soon) | Full 1.3T token dataset [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 324,322,256 | 42GB | 285MB
+| [Cohere/fineweb-edu-10B-index](https://huggingface.co/datasets/Cohere/fineweb-edu-10B-index)  | 10B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 9,267,429 | 1.4GB | 230MB |
+| [Cohere/fineweb-edu-100B-index](https://huggingface.co/datasets/Cohere/fineweb-edu-100B-index)  | 100B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 69,672,066 | 9.2GB | 380MB
+| [Cohere/fineweb-edu-350B-index](https://huggingface.co/datasets/Cohere/fineweb-edu-350B-index)  | 350B token sample from [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 160,198,578 | 21GB | 380MB
+| [Cohere/fineweb-edu-index](https://huggingface.co/datasets/Cohere/fineweb-edu-index) | Full 1.3T token dataset [fineweb-edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) embedded and indexed on document level. | 324,322,256 | 42GB | 285MB
 
 
 Each index comes with the respective corpus, that is chunked into smaller parts. These chunks are downloaded on-demand and reused for further queries.
@@ -53,60 +53,6 @@ You can also load a fully downloaded index from disk via:
 from DiskVectorIndex import DiskVectorIndex
 
 index = DiskVectorIndex("path/to/index")
-```
-
-# End2End RAG Example
-
-We can use the excellent RAG capabilities of the [Cohere Command R+](https://docs.cohere.com/docs/retrieval-augmented-generation-rag) model to build an end2end RAG pipeline:
-
-```python
-import cohere
-from DiskVectorIndex import DiskVectorIndex
-import os 
-import sys 
-
-co = cohere.Client(api_key=os.environ["COHERE_API_KEY"])
-index = DiskVectorIndex("Cohere/trec-rag-2024-index")
-
-question = "Which popular deep learning frameworks were developed by Facebook and Google? What are their differences?"
-prompt = f"Answer the following question with a detailed answer: {question}"
-
-
-print("Question:", question)
-
-# Step 1 - Decompose the question into sub-questions
-res = co.chat(
-  model="command-r-plus",
-  message=prompt,
-  search_queries_only=True
-)
-
-sub_queries = [r.text for r in res.search_queries]
-print("Generated sub queries:", sub_queries)
-
-# Step 2 - Search for relevant documents for each sub 
-print("Start searching")
-docs = []
-doc_id = 1
-for query in sub_queries:
-    hits = index.search(query, top_k=3)
-    for hit in hits:
-        docs.append({"id": str(doc_id), 'title': hit['doc']['title'], 'snippet': hit['doc']['segment']})
-        doc_id += 1
-
-print(f"Documents found: {len(docs)}")
-
-# Step 3 - Generate the response
-print("Start generating response")
-print("==============")
-
-for event in co.chat_stream(model="command-r-plus", message=prompt, documents=docs, citation_quality="fast"):
-    if event.event_type == "text-generation":
-        #Print a text chunk
-        print(event.text, end="")
-    elif event.event_type == "citation-generation":
-        #Print the citations as inline citations
-        print("["+", ".join(event.citations[0].document_ids)+"]", end="")
 ```
 
 # How does the DiskVectorIndex work?
